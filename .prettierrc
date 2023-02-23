@@ -1,5 +1,12 @@
 {
   "semi": true,
   "singleQuote": false,
-  "jsxSingleQuote": false
+  "jsxSingleQuote": false,
+  "prettier/prettier": [
+    "error",
+    {
+      "singleQuote": true,
+      "parser": "flow"
+    }
+  ]
 }

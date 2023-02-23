@@ -1,37 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import EVENTS from "./constants";
+import HomePage from "./pages/Home";
+import About from "./pages/About";
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    function onLocationChange() {
+      setCurrentPath(window.location.pathname);
+    }
+    window.addEventListener(EVENTS.push, onLocationChange);
+    window.addEventListener(EVENTS.pop, onLocationChange);
+    return () => {
+      window.removeEventListener(EVENTS.push, onLocationChange);
+      window.removeEventListener(EVENTS.pop, onLocationChange);
+    };
+  }, []);
+
   return (
     <main>
       {currentPath === "/" && <HomePage />}
       {currentPath === "/about" && <About />}
     </main>
-  );
-}
-
-function About() {
-  return (
-    <div>
-      <h1>About</h1>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi,
-        exercitationem!
-      </p>
-      <a href="/">Home</a>
-    </div>
-  );
-}
-
-function HomePage() {
-  return (
-    <div>
-      <h1>HomePage</h1>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi,
-        exercitationem!
-      </p>
-      <a href="/about">About</a>
-    </div>
   );
 }
