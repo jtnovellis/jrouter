@@ -1,5 +1,5 @@
 import React from "react";
-import navigate from "../utils/navigate";
+import Link from "../components/Link";
 
 export default function About() {
   return (
@@ -9,9 +9,7 @@ export default function About() {
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi,
         exercitationem!
       </p>
-      <button type="button" onClick={() => navigate("/")}>
-        About
-      </button>
+      <Link to="/">Home</Link>
     </div>
   );
 }
