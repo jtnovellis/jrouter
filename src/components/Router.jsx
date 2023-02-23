@@ -1,8 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children } from "react";
+import { match } from "path-to-regexp";
 import EVENTS from "../constants";
 
 export default function Router({
+  children,
   routes = [],
   defaultComponent: DefaultComponent = () => <h1>404</h1>,
 }) {
@@ -20,6 +23,28 @@ export default function Router({
     };
   }, []);
 
-  const Page = routes.find(({ path }) => path === currentPath)?.component;
-  return Page ? <Page /> : <DefaultComponent />;
+  const routesFromChildren = Children.map(children, ({ props, type }) => {
+    const { name } = type;
+    const isRoute = name === "Route";
+    if (!isRoute) return null;
+    return props;
+  });
+
+  const routeToUse = routes.concat(routesFromChildren);
+  let routeParams = {};
+
+  const Page = routeToUse.find(({ path }) => {
+    if (path === currentPath) return true;
+    const matchUrl = match(path, { decode: decodeURIComponent });
+    const matched = matchUrl(currentPath);
+    if (!matched) return false;
+    routeParams = matched.params;
+    return true;
+  })?.component;
+
+  return Page ? (
+    <Page routeParams={routeParams} />
+  ) : (
+    <DefaultComponent routeParams={routeParams} />
+  );
 }

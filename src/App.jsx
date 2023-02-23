@@ -1,8 +1,13 @@
-import React from "react";
-import HomePage from "./pages/Home";
-import About from "./pages/About";
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+import React, { lazy, Suspense } from "react";
 import Router from "./components/Router";
-import ErrorPage from "./pages/ErrorPage";
+import Route from "./components/Route";
+
+const HomePage = lazy(() => import("./pages/Home"));
+const About = lazy(() => import("./pages/About"));
+const Search = lazy(() => import("./pages/Search"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 
 const router = [
   { path: "/", component: HomePage },
@@ -11,8 +16,10 @@ const router = [
 
 export default function App() {
   return (
-    <main>
-      <Router routes={router} defaultComponent={ErrorPage} />
-    </main>
+    <Suspense fallback={<p>Loading...</p>}>
+      <Router routes={router} defaultComponent={ErrorPage}>
+        <Route path="/search/:id" component={Search} />
+      </Router>
+    </Suspense>
   );
 }
