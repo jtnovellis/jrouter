@@ -4,7 +4,7 @@ import EVENTS from "../constants";
 
 export default function Router({
   routes = [],
-  defaultComponent: DefaultComponent = () => null,
+  defaultComponent: DefaultComponent = () => <h1>404</h1>,
 }) {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
